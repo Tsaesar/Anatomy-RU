@@ -13,10 +13,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract Android project
+      - name: Show MainActivity
         run: |
-          unzip -o Anatomy-RU-project-v0.5.0.zip -d project
-          find project -maxdepth 3 -type f | sort
+          nl -ba project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt | sed -n '100,130p'
 
       - name: Set up Java
         uses: actions/setup-java@v4
