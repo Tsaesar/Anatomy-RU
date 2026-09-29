@@ -30,11 +30,11 @@ jobs:
           gradle-version: '8.10.2'
 
       - name: Build APK
-        working-directory: project
+        working-directory: project/Anatomy-RU
         run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Anatomy-RU-debug-apk
-          path: project/app/build/outputs/apk/debug/app-debug.apk
+          path: project/Anatomy-RU/app/build/outputs/apk/debug/app-debug.apk
