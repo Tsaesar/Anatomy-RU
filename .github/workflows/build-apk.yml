@@ -35,6 +35,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
+          # Fix Java/Kotlin JVM target
           p = Path("app/build.gradle.kts")
           s = p.read_text()
 
@@ -55,7 +56,17 @@ jobs:
           )
 
           p.write_text(s)
+
+          # Opt in to experimental Material 3 API
+          p = Path("app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt")
+          s = p.read_text()
+
+          if "ExperimentalMaterial3Api" not in s:
+              s = '@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)\n' + s
+
+          p.write_text(s)
           PY
+
 
       - name: Build APK
         working-directory: project/Anatomy-RU
