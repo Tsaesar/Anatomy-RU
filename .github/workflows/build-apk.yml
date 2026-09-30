@@ -13,13 +13,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract Android project
+      - name: Extract project and restore 3D model
         run: |
-          unzip -o Anatomy-RU-project-v0.6.0.zip -d project
-          find project -maxdepth 3 -type f | sort
-      - name: Show MainActivity
-        run: |
-          nl -ba project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt | sed -n '100,130p'
+          unzip -o Anatomy-RU-project-v0.7.0-code.zip -d project
+          cat SkeletalSystem100.glb.part1 SkeletalSystem100.glb.part2 > model.zip
+          mkdir -p project/Anatomy-RU/app/src/main/assets
+          unzip -o model.zip -d project/Anatomy-RU/app/src/main/assets
+          ls -lh project/Anatomy-RU/app/src/main/assets/SkeletalSystem100.glb
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -38,13 +38,13 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
-          # Fix Java/Kotlin JVM target
           p = Path("app/build.gradle.kts")
           s = p.read_text()
 
-          s = s.replace(
-              'android { namespace = "ru.tsaesar.anatomy"; compileSdk = 35',
-              '''android {
+          if "compileOptions" not in s:
+              s = s.replace(
+                  'android { namespace = "ru.tsaesar.anatomy"; compileSdk = 35',
+                  '''android {
                   namespace = "ru.tsaesar.anatomy"
                   compileSdk = 35
 
@@ -56,28 +56,17 @@ jobs:
                   kotlinOptions {
                       jvmTarget = "17"
                   }'''
-          )
-
-          p.write_text(s)
-
-          # Opt in to experimental Material 3 API
-          p = Path("app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt")
-          s = p.read_text()
-
-          if "ExperimentalMaterial3Api" not in s:
-              s = '@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)\n' + s
+              )
 
           p.write_text(s)
           PY
-
 
       - name: Build APK
         working-directory: project/Anatomy-RU
         run: gradle assembleDebug --stacktrace
 
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Anatomy-RU-debug-apk
+          name: Anatomy-RU-debug-apk-v0.7.0
           path: project/Anatomy-RU/app/build/outputs/apk/debug/app-debug.apk
