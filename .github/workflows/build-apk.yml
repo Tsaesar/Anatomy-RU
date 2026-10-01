@@ -16,6 +16,7 @@ jobs:
       - name: Extract project and restore 3D model
         run: |
           unzip -o Anatomy-RU-project-v0.7.0-code.zip -d project
+          sed -i '/modelViewer\.destroy()/d' project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt
           cat SkeletalSystem100.glb.part1 SkeletalSystem100.glb.part2 > model.zip
           mkdir -p project/Anatomy-RU/app/src/main/assets
           unzip -o model.zip -d project/Anatomy-RU/app/src/main/assets
