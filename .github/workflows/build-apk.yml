@@ -24,10 +24,10 @@ jobs:
           unzip -o model.zip -d project/Anatomy-RU/app/src/main/assets
           ls -lh project/Anatomy-RU/app/src/main/assets/SkeletalSystem100.glb
 
-      - name: Show MainActivity beginning
-    run: |
-      echo "=== MainActivity.kt lines 1-180 ==="
-      nl -ba project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt | sed -n '1,180p'
+            - name: Show MainActivity beginning
+            run: |
+          echo "=== MainActivity.kt lines 1-180 ==="
+          nl -ba project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt | sed -n '1,180p'
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
