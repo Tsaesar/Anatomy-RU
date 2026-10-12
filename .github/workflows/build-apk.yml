@@ -23,6 +23,7 @@ jobs:
           mkdir -p project/Anatomy-RU/app/src/main/assets
           unzip -o model.zip -d project/Anatomy-RU/app/src/main/assets
           ls -lh project/Anatomy-RU/app/src/main/assets/SkeletalSystem100.glb
+                - name: Show MainActivity around error
             - name: Show MainActivity beginning
             run: |
           echo "=== MainActivity.kt lines 1-180 ==="
