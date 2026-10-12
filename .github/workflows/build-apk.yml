@@ -1,6 +1,6 @@
 name: Build APK
 
-on:
+'on':
   push:
     branches: [main]
   workflow_dispatch:
@@ -16,18 +16,12 @@ jobs:
       - name: Extract project and restore 3D model
         run: |
           unzip -o Anatomy-RU-project-v0.7.0-code.zip -d project
-          echo "=== FULL MainActivity.kt ==="
-          nl -ba project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt
           sed -i '/modelViewer\.destroy()/d' project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt
           cat SkeletalSystem100.glb.part1 SkeletalSystem100.glb.part2 > model.zip
           mkdir -p project/Anatomy-RU/app/src/main/assets
           unzip -o model.zip -d project/Anatomy-RU/app/src/main/assets
           ls -lh project/Anatomy-RU/app/src/main/assets/SkeletalSystem100.glb
-                - name: Show MainActivity around error
-            - name: Show MainActivity beginning
-            run: |
-          echo "=== MainActivity.kt lines 1-180 ==="
-          nl -ba project/Anatomy-RU/app/src/main/java/ru/tsaeasar/anatomy/MainActivity.kt | sed -n '1,180p'
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -52,17 +46,17 @@ jobs:
               s = s.replace(
                   'android { namespace = "ru.tsaesar.anatomy"; compileSdk = 35',
                   '''android {
-                  namespace = "ru.tsaesar.anatomy"
-                  compileSdk = 35
+              namespace = "ru.tsaesar.anatomy"
+              compileSdk = 35
 
-                  compileOptions {
-                      sourceCompatibility = JavaVersion.VERSION_17
-                      targetCompatibility = JavaVersion.VERSION_17
-                  }
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
 
-                  kotlinOptions {
-                      jvmTarget = "17"
-                  }'''
+              kotlinOptions {
+                  jvmTarget = "17"
+              }'''
               )
 
           p.write_text(s)
